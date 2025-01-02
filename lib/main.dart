@@ -86,7 +86,8 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Social Todo App',
+        debugShowCheckedModeBanner: false, 
+        title: 'Todolity',
          theme: ThemeData.dark().copyWith(
     scaffoldBackgroundColor: const Color(0xFF1E1E1E),
     appBarTheme: AppBarTheme(
