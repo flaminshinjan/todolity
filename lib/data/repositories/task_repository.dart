@@ -20,31 +20,19 @@ class TaskRepository {
 Stream<List<Task>> getTasks(String userId) {
     return _firestore
         .collection('tasks')
-        .where('sharedWith', arrayContains: userId)
+        .where('createdBy', isEqualTo: userId) // Changed to fetch by createdBy
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
-            final data = doc.data();
             try {
-              DateTime createdAt;
-              if (data['createdAt'] is Timestamp) {
-                createdAt = (data['createdAt'] as Timestamp).toDate();
-              } else {
-                createdAt = DateTime.now();
-              }
-
-              return Task(
-                id: doc.id,
-                title: data['title'] as String,
-                description: data['description'] as String,
-                isCompleted: data['isCompleted'] as bool,
-                createdBy: data['createdBy'] as String,
-                sharedWith: List<String>.from(data['sharedWith'] as List),
-                createdAt: createdAt,
-              );
+              // Add error logging
+              _logger.d('Processing document: ${doc.id}');
+              _logger.d('Document data: ${doc.data()}');
+              
+              return Task.fromJson(doc.data(), doc.id);
             } catch (e) {
-              print('Error parsing task ${doc.id}: $e');
+              _logger.e('Error parsing task ${doc.id}: $e');
               rethrow;
             }
           }).toList();

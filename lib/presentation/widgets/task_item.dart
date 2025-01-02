@@ -172,22 +172,34 @@ class TaskItem extends StatelessWidget {
                       onSelected: (value) {
                         switch (value) {
                           case 'edit':
-                            showDialog(
-                              context: context,
-                              builder: (context) => EditTaskDialog(task: task),
-                            );
+                            showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) => SingleChildScrollView(
+      child: EditTaskDialog(task: task),
+    ),
+  );
                             break;
                           case 'share':
-                            showDialog(
-                              context: context,
-                              builder: (context) => ShareTaskDialog(task: task),
-                            );
+                            showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) => SingleChildScrollView(
+      child: ShareTaskDialog(task: task),
+    ),
+  );
                             break;
                           case 'viewShared':
-                            showDialog(
-                              context: context,
-                              builder: (context) => SharedUsersListDialog(task: task),
-                            );
+                            showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) => SingleChildScrollView(
+      child: SharedUsersListDialog(task: task),
+    ),
+  );
                             break;
                         }
                       },

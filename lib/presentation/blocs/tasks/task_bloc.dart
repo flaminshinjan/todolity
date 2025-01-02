@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todolity/data/models/task_model.dart';
 import '../../../data/repositories/task_repository.dart';
 import 'task_event.dart';
 import 'task_state.dart';
@@ -14,12 +15,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<DeleteTask>(_onDeleteTask);
   }
 
-  void _onLoadTasks(LoadTasks event, Emitter<TaskState> emit) async {
+void _onLoadTasks(LoadTasks event, Emitter<TaskState> emit) async {
     emit(TaskLoading());
     try {
+      print('Loading tasks for user: ${event.userId}'); // Debug log
       await emit.forEach(
         taskRepository.getTasks(event.userId),
-        onData: (tasks) => TaskLoaded(tasks),
+        onData: (List<Task> tasks) {
+          print('Received ${tasks.length} tasks'); // Debug log
+          return TaskLoaded(tasks);
+        },
         onError: (error, stackTrace) {
           print('Error loading tasks: $error');
           return TaskError(error.toString());
@@ -29,7 +34,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       print('Error in _onLoadTasks: $e');
       emit(TaskError(e.toString()));
     }
-  }
+}
 
   void _onAddTask(AddTask event, Emitter<TaskState> emit) async {
     try {

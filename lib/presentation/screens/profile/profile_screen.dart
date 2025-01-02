@@ -17,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
             // Top Profile Section
             Container(
               padding: EdgeInsets.fromLTRB(24, 
-                MediaQuery.of(context).padding.top + 20, 24, 24),
+                MediaQuery.of(context).padding.top + 20,0,0),
               child: Row(
                 children: [
                   // Profile Image
@@ -109,7 +109,7 @@ class ProfileScreen extends StatelessWidget {
                   Expanded(
                     child: _buildStatCard(
                       'Total Tasks',
-                      '20',
+                      '6',
                       Icons.task_alt,
                       Color(0xFF1E88E5),
                     ),
@@ -118,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
                   Expanded(
                     child: _buildStatCard(
                       'Completed',
-                      '15',
+                      '1',
                       Icons.check_circle,
                       Color(0xFF43A047),
                     ),
@@ -127,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
                   Expanded(
                     child: _buildStatCard(
                       'Pending',
-                      '5',
+                      '2',
                       Icons.pending_actions,
                       Color(0xFFFB8C00),
                     ),

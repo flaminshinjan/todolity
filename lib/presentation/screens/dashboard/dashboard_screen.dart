@@ -31,12 +31,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _showAddTaskDialog(BuildContext context) {
     HapticFeedback.mediumImpact();
-    showDialog(
-      context: context,
-      builder: (context) => AddTaskDialog(),
-    ).then((_) {
-      _logger.i('Add task dialog closed');
-    });
+    showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) => SingleChildScrollView(
+      child: AddTaskDialog(),
+    ),
+  );
   }
 
   void _onTabChanged(int index) {

@@ -87,52 +87,125 @@ class _ShareTaskDialogState extends State<ShareTaskDialog> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Dialog(
+    return Material(
+      type: MaterialType.transparency,
       child: Container(
-        constraints: BoxConstraints(maxHeight: 500),
-        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          left: 24,
+          right: 24,
+          top: 24,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Handle bar
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[600],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            SizedBox(height: 24),
             Text(
               'Share Task',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 24),
             TextField(
               controller: _searchController,
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Search users by email',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
+                hintStyle: TextStyle(color: Colors.grey[600]),
+                labelStyle: TextStyle(color: Colors.grey[400]),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey[800]!),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Color(0xFFF9BE03)),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
                 errorText: _errorMessage.isNotEmpty ? _errorMessage : null,
+                errorStyle: TextStyle(color: Colors.red),
               ),
               onChanged: (value) => _searchUsers(value),
             ),
             SizedBox(height: 16),
             if (_isLoading)
-              CircularProgressIndicator()
+              Center(child: CircularProgressIndicator(color: Color(0xFFF9BE03)))
             else if (_searchResults.isNotEmpty)
-              Expanded(
+              Container(
+                constraints: BoxConstraints(maxHeight: 300),
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: _searchResults.length,
                   itemBuilder: (context, index) {
                     final user = _searchResults[index];
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        child: Text(
-                          user.email[0].toUpperCase(),
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Color(0xFFF9BE03),
+                          child: Text(
+                            user.email[0].toUpperCase(),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        title: Text(
+                          user.email,
                           style: TextStyle(color: Colors.white),
                         ),
-                      ),
-                      title: Text(user.email),
-                      subtitle: user.name != null ? Text(user.name!) : null,
-                      trailing: IconButton(
-                        icon: Icon(Icons.share),
-                        onPressed: () => _shareWithUser(user),
+                        subtitle: user.name != null 
+                          ? Text(
+                              user.name!,
+                              style: TextStyle(color: Colors.grey[400]),
+                            ) 
+                          : null,
+                        trailing: IconButton(
+                          icon: Icon(
+                            Icons.share,
+                            color: Color(0xFFF9BE03),
+                          ),
+                          onPressed: () => _shareWithUser(user),
+                        ),
                       ),
                     );
                   },
@@ -144,19 +217,23 @@ class _ShareTaskDialogState extends State<ShareTaskDialog> {
               children: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Close'),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  ),
+                  child: Text(
+                    'Close',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
               ],
             ),
+            SizedBox(height: 16),
           ],
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 }

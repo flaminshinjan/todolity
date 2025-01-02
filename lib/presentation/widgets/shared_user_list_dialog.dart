@@ -44,36 +44,76 @@ class SharedUsersListDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
+    return Material(
+      type: MaterialType.transparency,
       child: Container(
-        constraints: BoxConstraints(maxHeight: 400),
-        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          left: 24,
+          right: 24,
+          top: 24,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Handle bar
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[600],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            SizedBox(height: 24),
             Text(
               'Shared Users',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            SizedBox(height: 16),
-            Expanded(
+            SizedBox(height: 24),
+            Container(
+              constraints: BoxConstraints(maxHeight: 300),
               child: FutureBuilder<List<AppUser>>(
                 future: _getSharedUsers(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFF9BE03),
+                      ),
+                    );
                   }
 
                   if (snapshot.hasError) {
                     return Center(
-                      child: Text('Error loading users'),
+                      child: Text(
+                        'Error loading users',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     );
                   }
 
                   final users = snapshot.data ?? [];
                   if (users.isEmpty) {
                     return Center(
-                      child: Text('No users shared with this task'),
+                      child: Text(
+                        'No users shared with this task',
+                        style: TextStyle(color: Colors.grey[400]),
+                      ),
                     );
                   }
 
@@ -82,16 +122,37 @@ class SharedUsersListDialog extends StatelessWidget {
                     itemCount: users.length,
                     itemBuilder: (context, index) {
                       final user = users[index];
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          child: Text(
-                            user.email[0].toUpperCase(),
-                            style: TextStyle(color: Colors.white),
-                          ),
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        title: Text(user.email),
-                        subtitle: user.name != null ? Text(user.name!) : null,
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Color(0xFFF9BE03),
+                            child: Text(
+                              user.email[0].toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            user.email,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          subtitle: user.name != null 
+                            ? Text(
+                                user.name!,
+                                style: TextStyle(color: Colors.grey[400]),
+                              ) 
+                            : null,
+                        ),
                       );
                     },
                   );
@@ -99,10 +160,25 @@ class SharedUsersListDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  ),
+                  child: Text(
+                    'Close',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 16),
           ],
         ),
       ),

@@ -19,7 +19,14 @@ class TaskListScreen extends StatefulWidget {
 
 class _TaskListScreenState extends State<TaskListScreen> {
   DateTime selectedDate = DateTime.now();
-
+@override
+void initState() {
+  super.initState();
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    context.read<TaskBloc>().add(LoadTasks(user.uid));
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Column(
