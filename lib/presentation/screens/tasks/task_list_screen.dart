@@ -124,7 +124,7 @@ class CalendarStrip extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ...['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(
+              ...[ 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'].map(
                 (day) => Text(
                   day,
                   style: TextStyle(
