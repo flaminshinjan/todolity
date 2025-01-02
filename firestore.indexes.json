@@ -1,0 +1,33 @@
+{
+    "indexes": [
+      {
+        "collectionGroup": "shared_tasks",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "sharedWith",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "createdAt",
+            "order": "DESCENDING"
+          }
+        ]
+      },
+      {
+        "collectionGroup": "shared_tasks",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "sharedBy",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "createdAt",
+            "order": "DESCENDING"
+          }
+        ]
+      }
+    ],
+    "fieldOverrides": []
+  }

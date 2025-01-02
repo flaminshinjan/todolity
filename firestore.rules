@@ -1,0 +1,186 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isValidTask() {
+      let requiredFields = ['title', 'description', 'createdBy', 'createdAt', 'isCompleted', 'sharedWith'];
+      let incomingData = request.resource.data;
+      
+      return incomingData.keys().hasAll(requiredFields) &&
+             incomingData.title is string &&
+             incomingData.title.size() > 0 &&
+             incomingData.title.size() <= 100 &&
+             incomingData.description is string &&
+             incomingData.description.size() <= 500 &&
+             incomingData.createdBy == request.auth.uid &&
+             incomingData.createdAt is timestamp &&
+             incomingData.isCompleted is bool &&
+             incomingData.sharedWith is list;
+    }
+
+    function isValidSharedTask() {
+      let requiredFields = ['title', 'description', 'dueDate', 'isCompleted', 
+                           'ownerId', 'sharedBy', 'sharedWith', 'createdAt'];
+      let incomingData = request.resource.data;
+      
+      return incomingData.keys().hasAll(requiredFields) &&
+             incomingData.title is string &&
+             incomingData.title.size() > 0 &&
+             incomingData.title.size() <= 100 &&
+             incomingData.description is string &&
+             incomingData.description.size() <= 500 &&
+             incomingData.dueDate is timestamp &&
+             incomingData.isCompleted is bool &&
+             incomingData.ownerId is string &&
+             incomingData.sharedBy is string &&
+             incomingData.sharedWith is string &&
+             incomingData.createdAt is timestamp;
+    }
+
+    // Users Collection Rules
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      
+      allow create: if isAuthenticated() && 
+                   isOwner(userId) &&
+                   request.resource.data.keys().hasAll(['email', 'name', 'createdAt']);
+      
+      allow update: if isAuthenticated() && 
+                   isOwner(userId) &&
+                   !request.resource.data.diff(resource.data).affectedKeys()
+                    .hasAny(['email', 'createdAt']);
+      
+      allow delete: if isAuthenticated() && isOwner(userId);
+    }
+
+    // Tasks Collection Rules
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated() && (
+        resource.data.createdBy == request.auth.uid || 
+        resource.data.sharedWith.hasAny([request.auth.uid])
+      );
+      
+      allow create: if isAuthenticated() && 
+                   isValidTask() &&
+                   request.resource.data.createdBy == request.auth.uid;
+      
+      allow update: if isAuthenticated() && (
+        (resource.data.createdBy == request.auth.uid) ||
+        (resource.data.sharedWith.hasAny([request.auth.uid]) &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isCompleted']))
+      );
+      
+      allow delete: if isAuthenticated() && 
+                   resource.data.createdBy == request.auth.uid;
+    }
+
+    // Shared Tasks Collection Rules
+    match /shared_tasks/{taskId} {
+      allow read: if isAuthenticated() && (
+        resource.data.sharedWith == request.auth.uid ||
+        resource.data.sharedBy == request.auth.uid ||
+        resource.data.ownerId == request.auth.uid
+      );
+      
+      allow create: if isAuthenticated() && 
+                   isValidSharedTask() &&
+                   request.resource.data.sharedBy == request.auth.uid;
+      
+      allow update: if isAuthenticated() && (
+        // Owner can update everything
+        resource.data.ownerId == request.auth.uid ||
+        // Original sharer can update everything
+        resource.data.sharedBy == request.auth.uid ||
+        // Shared user can only update completion status
+        (resource.data.sharedWith == request.auth.uid &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isCompleted']))
+      );
+      
+      allow delete: if isAuthenticated() && (
+        resource.data.ownerId == request.auth.uid ||
+        resource.data.sharedBy == request.auth.uid ||
+        resource.data.sharedWith == request.auth.uid
+      );
+    }
+
+    // Task Comments Collection Rules
+    match /tasks/{taskId}/comments/{commentId} {
+      allow read: if isAuthenticated() && (
+        get(/databases/$(database)/documents/tasks/$(taskId)).data.createdBy == request.auth.uid ||
+        get(/databases/$(database)/documents/tasks/$(taskId)).data.sharedWith.hasAny([request.auth.uid])
+      );
+      
+      allow create: if isAuthenticated() && 
+                   request.resource.data.keys().hasAll(['text', 'createdBy', 'createdAt']) &&
+                   request.resource.data.createdBy == request.auth.uid &&
+                   request.resource.data.text.size() <= 500;
+      
+      allow update: if isAuthenticated() && 
+                   resource.data.createdBy == request.auth.uid &&
+                   request.resource.data.text.size() <= 500;
+      
+      allow delete: if isAuthenticated() && 
+                   resource.data.createdBy == request.auth.uid;
+    }
+
+    // Shared Task Comments Collection Rules
+    match /shared_tasks/{taskId}/comments/{commentId} {
+      allow read: if isAuthenticated() && (
+        get(/databases/$(database)/documents/shared_tasks/$(taskId)).data.sharedWith == request.auth.uid ||
+        get(/databases/$(database)/documents/shared_tasks/$(taskId)).data.sharedBy == request.auth.uid ||
+        get(/databases/$(database)/documents/shared_tasks/$(taskId)).data.ownerId == request.auth.uid
+      );
+      
+      allow create: if isAuthenticated() && 
+                   request.resource.data.keys().hasAll(['text', 'createdBy', 'createdAt']) &&
+                   request.resource.data.createdBy == request.auth.uid &&
+                   request.resource.data.text.size() <= 500;
+      
+      allow update: if isAuthenticated() && 
+                   resource.data.createdBy == request.auth.uid &&
+                   request.resource.data.text.size() <= 500;
+      
+      allow delete: if isAuthenticated() && 
+                   resource.data.createdBy == request.auth.uid;
+    }
+
+    // User Settings Collection Rules
+    match /users/{userId}/settings/{settingId} {
+      allow read: if isAuthenticated() && isOwner(userId);
+      allow write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // Task Invites Collection Rules
+    match /taskInvites/{inviteId} {
+      allow read: if isAuthenticated() && (
+        resource.data.fromUserId == request.auth.uid ||
+        resource.data.toUserId == request.auth.uid
+      );
+      
+      allow create: if isAuthenticated() &&
+                   request.resource.data.fromUserId == request.auth.uid &&
+                   request.resource.data.keys().hasAll(['fromUserId', 'toUserId', 'taskId', 'status', 'createdAt']);
+      
+      allow update: if isAuthenticated() && (
+        resource.data.toUserId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+      );
+      
+      allow delete: if isAuthenticated() &&
+                   (resource.data.fromUserId == request.auth.uid ||
+                    resource.data.toUserId == request.auth.uid);
+    }
+  }
+}

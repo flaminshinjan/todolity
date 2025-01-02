@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "noImplicitReturns": true,
+      "noUnusedLocals": true,
+      "outDir": "lib",
+      "sourceMap": true,
+      "strict": true,
+      "target": "es2017",
+      "allowJs": true  // Add this line
+    },
+    "compileOnSave": true,
+    "include": [
+      "src",
+      ".eslintrc.js"  // Add this line
+    ]
+  }
