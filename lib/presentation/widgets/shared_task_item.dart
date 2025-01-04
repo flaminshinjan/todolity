@@ -45,7 +45,7 @@ class SharedTaskItem extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
       decoration: BoxDecoration(
-        color: Color(0xfff9be03),
+        color: Color(0xffF6DEC2),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
@@ -118,7 +118,7 @@ class SharedTaskItem extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(
                       task.isCompleted ? Icons.check : Icons.check_outlined,
-                      color: Color(0xfff9be03),
+                      color: Color(0xffF6DEC2),
                       size: 20,
                     ),
                     onPressed: () {
@@ -136,7 +136,7 @@ class SharedTaskItem extends StatelessWidget {
                   child: PopupMenuButton<String>(
                     icon: Icon(
                       Icons.arrow_forward,
-                      color: Color(0xfff9be03),
+                      color: Color(0xffF6DEC2),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -199,7 +199,7 @@ class SharedTaskItem extends StatelessWidget {
               right: index * 20.0,
               child: CircleAvatar(
                 radius: 20,
-                backgroundColor: Colors.grey[300],
+                backgroundColor: Colors.grey[800],
                 child: Text(users[index].name?[0] ?? users[index].email[0]),
               ),
             ),
@@ -231,7 +231,7 @@ class SharedTaskItem extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Color(0xfff9be03),
+          color: Color(0xffF6DEC2),
           fontSize: 12,
         ),
       ),

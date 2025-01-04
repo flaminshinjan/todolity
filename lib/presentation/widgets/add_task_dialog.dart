@@ -105,7 +105,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Color(0xFFF9BE03)),
+                        borderSide: BorderSide(color: Color(0xffF6DEC2)),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -143,7 +143,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Color(0xFFF9BE03)),
+                        borderSide: BorderSide(color: Color(0xffF6DEC2)),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -183,7 +183,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                       ElevatedButton(
                         onPressed: _submitForm,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFF9BE03),
+                          backgroundColor: Color(0xffF6DEC2),
                           foregroundColor: Colors.black,
                           padding: EdgeInsets.symmetric(
                             horizontal: 24,

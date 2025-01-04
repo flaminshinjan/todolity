@@ -83,7 +83,7 @@ class TaskItem extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         decoration: BoxDecoration(
-          color: Color(0xfff9be03),
+          color: Color(0xffFFDADA),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
@@ -146,7 +146,7 @@ class TaskItem extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(
                         task.isCompleted ? Icons.check : Icons.check_outlined,
-                        color: Color(0xfff9be03),
+                        color: Color(0xffFFDADA),
                         size: 20,
                       ),
                       onPressed: () => _toggleCompletion(context),
@@ -162,7 +162,7 @@ class TaskItem extends StatelessWidget {
                     child: PopupMenuButton<String>(
                       icon: Icon(
                         Icons.arrow_forward,
-                        color: Color(0xfff9be03),
+                        color: Color(0xffFFDADA),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -287,7 +287,7 @@ class TaskItem extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Color(0xfff9be03),
+          color: Color(0xffFFDADA),
           fontSize: 12,
         ),
       ),

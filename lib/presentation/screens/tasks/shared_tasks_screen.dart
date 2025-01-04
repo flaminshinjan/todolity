@@ -54,7 +54,7 @@ class SharedTasksView extends StatelessWidget {
               child: TabBar(
                 dividerColor: Colors.transparent,
                 indicator: BoxDecoration(
-                  color: Color(0xFFF9BE03),
+                  color: Color(0xffF6DEC2),
                   borderRadius: BorderRadius.circular(20),
                   
                 ),
@@ -103,7 +103,7 @@ class SharedTasksView extends StatelessWidget {
     return BlocBuilder<SharedTaskBloc, SharedTaskState>(
       builder: (context, state) {
         if (state is SharedTaskLoading) {
-          return Center(child: CircularProgressIndicator(color: Color(0xFFF9BE03)));
+          return Center(child: CircularProgressIndicator(color: Color(0xffF6DEC2)));
         } else if (state is SharedTaskLoaded) {
           if (state.sharedWithMeTasks.isEmpty) {
             return Center(
@@ -146,7 +146,7 @@ class SharedTasksView extends StatelessWidget {
     return BlocBuilder<SharedTaskBloc, SharedTaskState>(
       builder: (context, state) {
         if (state is SharedTaskLoading) {
-          return Center(child: CircularProgressIndicator(color: Color(0xFFF9BE03)));
+          return Center(child: CircularProgressIndicator(color: Color(0xffF6DEC2)));
         } else if (state is SharedTaskLoaded) {
           if (state.sharedByMeTasks.isEmpty) {
             return Center(

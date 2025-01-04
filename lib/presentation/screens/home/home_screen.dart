@@ -94,20 +94,20 @@ Widget _buildTaskOverviewCard(BuildContext context) {
             _buildCircularItem(
               'My Tasks',
               counts['myTasks'] ?? 0,
+              Color(0xffFFC9C9),
               Colors.black,
-              Colors.white,
             ),
             _buildCircularItem(
               'Shared with Me',
               counts['sharedWithMe'] ?? 0,
+              Color(0xffBAE5FF),
               Colors.black,
-              Colors.white,
             ),
             _buildCircularItem(
               'Shared by Me',
               counts['sharedByMe'] ?? 0,
-              const Color(0xFF036ac9),
-              Colors.white,
+              const Color(0xFFBAE5FF),
+              Colors.black,
               isSpecial: true,
             ),
           ],
@@ -238,7 +238,7 @@ Widget _buildMyTasksCard(BuildContext context) {
             return Container(
               margin: EdgeInsets.only(bottom: 15),
               decoration: BoxDecoration(
-                color: const Color(0xFFf9be03),
+                color: const  Color(0xffFFC9C9),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Padding(
@@ -377,7 +377,7 @@ Widget _buildSharedWithMeCard(BuildContext context) {
                   return Container(
                     margin: EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFf9be03),
+                      color: const Color(0xffBAE5FF),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Padding(

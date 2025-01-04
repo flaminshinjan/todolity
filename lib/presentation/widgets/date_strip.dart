@@ -20,7 +20,7 @@ class DateStrip extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFf9be03),
+        color: const Color(0xFFEEDEFF),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(

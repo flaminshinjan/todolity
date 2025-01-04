@@ -98,7 +98,7 @@ class CalendarStrip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0xFFF9BE03),
+        color: Color(0xffFFDADA),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -158,7 +158,7 @@ class CalendarStrip extends StatelessWidget {
                         child: Text(
                           '${date.day}',
                           style: TextStyle(
-                            color: isSelected ? Color(0xfff9be03) : Colors.black,
+                            color: isSelected ? Color(0xffFFDADA) : Colors.black,
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                           ),
                         ),
