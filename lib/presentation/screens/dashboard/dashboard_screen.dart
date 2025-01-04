@@ -52,7 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: const Color.fromARGB(255, 12, 12, 12),
+    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
     appBar: _selectedIndex == 0 ? PreferredSize(  // Only show AppBar when home tab is selected
       preferredSize: Size.fromHeight(100),
       child: Container(
@@ -65,26 +65,26 @@ Widget build(BuildContext context) {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.white,
-                backgroundImage: _currentUser?.photoURL != null
-                    ? NetworkImage(_currentUser!.photoURL!)
-                    : null,
-                child: _currentUser?.photoURL == null
-                    ? Icon(Icons.person, color: Colors.black54)
-                    : null,
-              ),
+Container(
+  width: 50,
+  height: 50,
+  
+  child: Image.asset(
+      'assets/images/profile_placeholder.png',  // Update with your asset path
+      fit: BoxFit.cover,
+    ),
+  
+),
               SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Hi,',
+                    'Good Evening,',
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 14,
@@ -93,7 +93,7 @@ Widget build(BuildContext context) {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    _currentUser?.displayName ?? 'Shinjan',
+                    _currentUser?.displayName ?? 'Shinjan 👋🏼',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
@@ -193,7 +193,7 @@ Expanded(child: _screens[_selectedIndex],),
             borderRadius: BorderRadius.circular(20),
             child: Icon(
               Icons.add,
-              color: Colors.white,
+              color: Colors.black,
               size: 32,
             ),
           ),

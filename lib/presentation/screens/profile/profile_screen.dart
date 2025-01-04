@@ -9,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,52 +21,11 @@ class ProfileScreen extends StatelessWidget {
               child: Row(
                 children: [
                   // Profile Image
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Color(0xFFF9BE03),
-                        width: 2,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 10,
-                          offset: Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: currentUser?.photoURL != null
-                          ? CachedNetworkImage(
-                              imageUrl: currentUser!.photoURL!,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Container(
-                                color: Colors.grey[800],
-                                child: Icon(
-                                  Icons.person,
-                                  size: 30,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.person,
-                                size: 30,
-                                color: Colors.grey[600],
-                              ),
-                            )
-                          : Container(
-                              color: Colors.grey[800],
-                              child: Icon(
-                                Icons.person,
-                                size: 30,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                    ),
-                  ),
+                  Image.asset(
+                    height: 70,
+      'assets/images/profile_placeholder.png',  // Update with your asset path
+      fit: BoxFit.cover,
+    ),
                   SizedBox(width: 16),
                   // User Info
                   Expanded(
@@ -76,14 +35,14 @@ class ProfileScreen extends StatelessWidget {
                         Text(
                           'Hi,',
                           style: TextStyle(
-                            color: Colors.grey[400],
+                            color: Colors.grey[800],
                             fontSize: 16,
                           ),
                         ),
                         Text(
                           currentUser?.displayName ?? 'Shinjan',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -91,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                         Text(
                           currentUser?.email ?? 'email@example.com',
                           style: TextStyle(
-                            color: Colors.grey[400],
+                            color: Colors.grey[800],
                             fontSize: 14,
                           ),
                         ),
@@ -141,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
               child: Text(
                 'Settings',
                 style: TextStyle(
-                  color: Color(0xFFF9BE03),
+                  color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -244,7 +203,7 @@ class ProfileScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           SizedBox(height: 4),
@@ -252,7 +211,7 @@ class ProfileScreen extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.white70,
+              color: Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
@@ -268,7 +227,7 @@ class ProfileScreen extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.black.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
@@ -289,14 +248,14 @@ class ProfileScreen extends StatelessWidget {
         title: Text(
           title,
           style: TextStyle(
-            color: isDestructive ? Colors.red : Colors.white,
+            color: isDestructive ? Colors.red : Colors.black,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
         trailing: Icon(
           Icons.chevron_right,
-          color: isDestructive ? Colors.red : Colors.white54,
+          color: isDestructive ? Colors.red : Colors.black54,
         ),
       ),
     );

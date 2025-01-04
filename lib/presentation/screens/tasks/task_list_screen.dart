@@ -41,7 +41,7 @@ void initState() {
               fontSize: 30,
               height: 1.2,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           ),

@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
               fontSize: 20,
               height: 1.2,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           ),
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
               fontSize: 20,
               height: 1.2,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           ),
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
               fontSize: 20,
               height: 1.2,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           ),
@@ -94,14 +94,14 @@ Widget _buildTaskOverviewCard(BuildContext context) {
             _buildCircularItem(
               'My Tasks',
               counts['myTasks'] ?? 0,
-              Colors.white,
               Colors.black,
+              Colors.white,
             ),
             _buildCircularItem(
               'Shared with Me',
               counts['sharedWithMe'] ?? 0,
-              Colors.white,
               Colors.black,
+              Colors.white,
             ),
             _buildCircularItem(
               'Shared by Me',
@@ -188,7 +188,7 @@ Widget _buildShimmerCircle() {
     width: 100,
     height: 100,
     decoration: BoxDecoration(
-      color: Colors.white24,
+      color: Colors.black26,
       shape: BoxShape.circle,
     ),
   );
@@ -204,7 +204,7 @@ Widget _buildErrorCard() {
         (index) => _buildCircularItem(
           'Error',
           0,
-          Colors.white,
+          Colors.black,
           Colors.red,
         ),
       ),
@@ -309,7 +309,7 @@ Widget _buildMyTasksLoadingCard() {
           margin: EdgeInsets.only(bottom: 12),
           height: 72,
           decoration: BoxDecoration(
-            color: Colors.white24,
+            color: Colors.black26,
             borderRadius: BorderRadius.circular(20),
           ),
         );
@@ -361,7 +361,7 @@ Widget _buildSharedWithMeCard(BuildContext context) {
                   child: Text(
                     'No shared tasks',
                     style: TextStyle(
-                      color: Colors.white54,
+                      color: Colors.black54,
                       fontSize: 14,
                     ),
                   ),

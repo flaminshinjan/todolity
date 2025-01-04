@@ -141,7 +141,7 @@ class SharedTaskItem extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    color: Color(0xfff9be03),
+                    color: Color.fromARGB(255, 0, 0, 0),
                     elevation: 4,
                     onSelected: (value) {
                       // Handle menu actions

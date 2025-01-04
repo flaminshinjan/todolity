@@ -65,15 +65,127 @@ class MyApp extends StatelessWidget {
   final AuthRepository authRepository = AuthRepository();
   final TaskRepository taskRepository = TaskRepository();
 
+  // Light theme configuration
+  final ThemeData lightTheme = ThemeData.light().copyWith(
+    scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      iconTheme: IconThemeData(color: Color(0xFF036ac9)),
+      titleTextStyle: TextStyle(
+        color: Color(0xFF036ac9),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    colorScheme: const ColorScheme.light(
+      primary: Color(0xFF036ac9),
+      secondary: Color(0xFFE0E0E0),
+      surface: Color(0xFFFFFFFF),
+      background: Color(0xFFF5F5F5),
+      onPrimary: Colors.white,
+      onSecondary: Color(0xFF1E1E1E),
+      onSurface: Color(0xFF1E1E1E),
+      onBackground: Color(0xFF1E1E1E),
+    ),
+    cardTheme: const CardTheme(
+      color: Colors.white,
+      elevation: 2,
+      shadowColor: Colors.black12,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Color(0xFF036ac9)),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF036ac9),
+        foregroundColor: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    ),
+  );
+
+  // Dark theme configuration
+  final ThemeData darkTheme = ThemeData.dark().copyWith(
+    scaffoldBackgroundColor: const Color(0xFF1E1E1E),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      iconTheme: IconThemeData(color: Color(0xFF036ac9)),
+      titleTextStyle: TextStyle(
+        color: Color(0xFF036ac9),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    colorScheme: const ColorScheme.dark(
+      primary: Color(0xFF036ac9),
+      secondary: Color(0xFF2A2A2A),
+      surface: Colors.white,
+      background: Colors.white,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onSurface: Colors.white,
+      onBackground: Colors.white,
+    ),
+    cardTheme: const CardTheme(
+      color: Color(0xFF2A2A2A),
+      elevation: 2,
+      shadowColor: Colors.black26,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: const Color(0xFF2A2A2A),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Color(0xFF404040)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Color(0xFF404040)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Color(0xFF036ac9)),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF036ac9),
+        foregroundColor: Colors.white,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<SharedTaskBloc>(
-      create: (context) => SharedTaskBloc(
-        repository: SharedTaskRepository(),
-      ),
-    ),
+          create: (context) => SharedTaskBloc(
+            repository: SharedTaskRepository(),
+          ),
+        ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(
             authRepository: authRepository,
@@ -86,28 +198,16 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false, 
+        debugShowCheckedModeBanner: false,
         title: 'Todolity',
-         theme: ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: const Color(0xFF1E1E1E),
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      
-      
-    ),
-    colorScheme: ColorScheme.dark(
-      primary: const Color(0xFF036ac9),
-      secondary: const Color(0xFF2A2A2A),
-      surface: const Color(0xFF2A2A2A),
-      background: const Color(0xFF1E1E1E),
-    ),
-  ),
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system, // This will follow system theme settings
         home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             // Show splash screen while checking auth state
             if (state is AuthLoading) {
-              return Scaffold(
+              return const Scaffold(
                 body: Center(
                   child: CircularProgressIndicator(),
                 ),

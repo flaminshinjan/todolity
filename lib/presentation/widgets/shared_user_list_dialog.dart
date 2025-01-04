@@ -15,13 +15,24 @@ class SharedUsersListDialog extends StatelessWidget {
     try {
       _logger.i('Fetching shared users for task: ${task.id}');
       
-      if (task.sharedWith.isEmpty) {
+      // First, get the task document to get up-to-date sharedWith list
+      final taskDoc = await _firestore.collection('tasks').doc(task.id).get();
+      
+      if (!taskDoc.exists || taskDoc.data() == null) {
+        _logger.w('Task document not found');
+        return [];
+      }
+
+      final sharedWithIds = List<String>.from(taskDoc.data()!['sharedWith'] ?? []);
+      
+      if (sharedWithIds.isEmpty) {
+        _logger.i('No shared users found');
         return [];
       }
 
       // Get users from the users collection using sharedWith IDs
       final userSnapshots = await Future.wait(
-        task.sharedWith.map((userId) => 
+        sharedWithIds.map((userId) => 
           _firestore.collection('users').doc(userId).get()
         )
       );
@@ -32,7 +43,7 @@ class SharedUsersListDialog extends StatelessWidget {
           .map((doc) => AppUser(
                 id: doc.id,
                 email: doc.data()!['email'] ?? '',
-                name: doc.data()!['name'],
+                name: doc.data()!['name'] ?? '',
               ))
           .toList();
 
@@ -48,11 +59,18 @@ class SharedUsersListDialog extends StatelessWidget {
       type: MaterialType.transparency,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, -5),
+            ),
+          ],
         ),
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -70,7 +88,7 @@ class SharedUsersListDialog extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[600],
+                  color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -81,7 +99,7 @@ class SharedUsersListDialog extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black87,
               ),
             ),
             SizedBox(height: 24),
@@ -93,7 +111,7 @@ class SharedUsersListDialog extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: CircularProgressIndicator(
-                        color: Color(0xFFF9BE03),
+                        color: Color(0xFF036ac9),
                       ),
                     );
                   }
@@ -102,7 +120,10 @@ class SharedUsersListDialog extends StatelessWidget {
                     return Center(
                       child: Text(
                         'Error loading users',
-                        style: TextStyle(color: Colors.red),
+                        style: TextStyle(
+                          color: Colors.red[700],
+                          fontSize: 16,
+                        ),
                       ),
                     );
                   }
@@ -112,7 +133,10 @@ class SharedUsersListDialog extends StatelessWidget {
                     return Center(
                       child: Text(
                         'No users shared with this task',
-                        style: TextStyle(color: Colors.grey[400]),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 16,
+                        ),
                       ),
                     );
                   }
@@ -125,16 +149,17 @@ class SharedUsersListDialog extends StatelessWidget {
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.grey[900],
+                          color: Colors.grey[50],
                           borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey[200]!),
                         ),
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Color(0xFFF9BE03),
+                            backgroundColor: Color(0xFF036ac9),
                             child: Text(
                               user.email[0].toUpperCase(),
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -142,14 +167,14 @@ class SharedUsersListDialog extends StatelessWidget {
                           title: Text(
                             user.email,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black87,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          subtitle: user.name != null 
+                          subtitle: user.name != null && user.name!.isNotEmpty
                             ? Text(
                                 user.name!,
-                                style: TextStyle(color: Colors.grey[400]),
+                                style: TextStyle(color: Colors.grey[600]),
                               ) 
                             : null,
                         ),
@@ -171,7 +196,7 @@ class SharedUsersListDialog extends StatelessWidget {
                   child: Text(
                     'Close',
                     style: TextStyle(
-                      color: Colors.grey[400],
+                      color: Colors.grey[700],
                       fontSize: 16,
                     ),
                   ),

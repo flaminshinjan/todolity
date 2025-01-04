@@ -48,7 +48,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       type: MaterialType.transparency,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
@@ -81,7 +81,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             SizedBox(height: 24),
@@ -91,15 +91,17 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                 children: [
                   TextFormField(
                     controller: _titleController,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color.fromARGB(255, 236, 236, 236),
                       labelText: 'Title',
                       hintText: 'Enter task title',
-                      labelStyle: TextStyle(color: Colors.grey[400]),
-                      hintStyle: TextStyle(color: Colors.grey[600]),
+                      labelStyle: TextStyle(color: Colors.grey[800]),
+                      hintStyle: TextStyle(color: Colors.grey[800]),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey[800]!),
+                        borderSide: BorderSide(color: Colors.grey[200]!),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -125,16 +127,19 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   SizedBox(height: 16),
                   TextFormField(
                     controller: _descriptionController,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                     maxLines: 3,
+                    
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color.fromARGB(255, 236, 236, 236),
                       labelText: 'Description',
                       hintText: 'Enter task description',
-                      labelStyle: TextStyle(color: Colors.grey[400]),
+                      labelStyle: TextStyle(color: Colors.grey[800]),
                       hintStyle: TextStyle(color: Colors.grey[600]),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey[800]!),
+                        borderSide: BorderSide(color: Colors.grey[200]!),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -169,7 +174,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                         child: Text(
                           'Cancel',
                           style: TextStyle(
-                            color: Colors.grey[400],
+                            color: Colors.grey[600],
                             fontSize: 16,
                           ),
                         ),
