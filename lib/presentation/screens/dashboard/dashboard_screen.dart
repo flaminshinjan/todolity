@@ -32,13 +32,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _showAddTaskDialog(BuildContext context) {
     HapticFeedback.mediumImpact();
     showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) => SingleChildScrollView(
-      child: AddTaskDialog(),
-    ),
-  );
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => SingleChildScrollView(
+        child: AddTaskDialog(),
+      ),
+    );
   }
 
   void _onTabChanged(int index) {
@@ -49,160 +49,171 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-    appBar: _selectedIndex == 0 ? PreferredSize(  // Only show AppBar when home tab is selected
-      preferredSize: Size.fromHeight(100),
-      child: Container(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        decoration: BoxDecoration(
-          color: const Color(0xffEEDEFF),
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(24),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-          child: Row(
-            children: [
-Container(
-  width: 50,
-  height: 50,
-  
-  child: Image.asset(
-      'assets/images/profile_placeholder.png',  // Update with your asset path
-      fit: BoxFit.cover,
-    ),
-  
-),
-              SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Good Evening,',
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      appBar: _selectedIndex == 0
+          ? PreferredSize(
+              // Only show AppBar when home tab is selected
+              preferredSize: Size.fromHeight(100),
+              child: Container(
+                padding:
+                    EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                decoration: BoxDecoration(
+                  color: const Color(0xffEEDEFF),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(24),
+                    bottomRight: Radius.circular(24),
                   ),
-                  SizedBox(height: 2),
-                  Text(
-                    _currentUser?.displayName ?? 'Shinjan 👋🏼',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset(
+                          'assets/images/profile_placeholder.png', // Update with your asset path
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Good Evening,',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            _currentUser?.displayName ?? 'Aviral 👋🏼',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.notifications_outlined),
+                          color: Colors.black87,
+                          onPressed: () {
+                            HapticFeedback.lightImpact();
+                            _logger.i('Notifications button pressed');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          : null, // Return null for AppBar when not on home tab
+
+      body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              Expanded(
+                child: _screens[_selectedIndex],
+              ),
+            ],
+          )),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(15, 15, 10, 32),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Container(
+                height: 70,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEEDEFF),
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
                     ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                          child: _buildNavItem(
+                              0, Icons.home_outlined, Icons.home, 'Home')),
+                      Expanded(
+                          child: _buildNavItem(
+                              1, Icons.task_outlined, Icons.task, 'Tasks')),
+                      Expanded(
+                          child: _buildNavItem(
+                              2, Icons.share_outlined, Icons.share, 'Shared')),
+                      Expanded(
+                          child: _buildNavItem(3, Icons.person_outline,
+                              Icons.person, 'Profile')),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Container(
+              height: 70,
+              width: 70,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF6DEC2),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
-              Spacer(),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.notifications_outlined),
-                  color: Colors.black87,
-                  onPressed: () {
-                    HapticFeedback.lightImpact();
-                    _logger.i('Notifications button pressed');
-                  },
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () => _showAddTaskDialog(context),
+                  borderRadius: BorderRadius.circular(20),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.black,
+                    size: 32,
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    ) : null,  // Return null for AppBar when not on home tab
- 
-      body: SafeArea(
-        bottom: false,
-        child:Column(children: [
-         
-Expanded(child: _screens[_selectedIndex],),
-        ],) 
-      ),
-      bottomNavigationBar: Padding(
-  padding: const EdgeInsets.fromLTRB(15, 15, 10, 32),
-  child: Row(
-    children: [
-      Expanded(
-        flex: 4,
-        child: Container(
-          height: 70,
-          decoration: BoxDecoration(
-            color: const Color(0xFFEEDEFF),
-            borderRadius: BorderRadius.circular(24),
-            
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(child: _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home')),
-                Expanded(child: _buildNavItem(1, Icons.task_outlined, Icons.task, 'Tasks')),
-                Expanded(child: _buildNavItem(2, Icons.share_outlined, Icons.share, 'Shared')),
-                Expanded(child: _buildNavItem(3, Icons.person_outline, Icons.person, 'Profile')),
-              ],
-            ),
-          ),
-        ),
-      ),
-      SizedBox(width: 10),
-      Container(
-        height: 70,
-        width: 70,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF6DEC2),
-          borderRadius: BorderRadius.circular(20),
-         
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 8,
-              offset: Offset(0, 2),
             ),
           ],
         ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => _showAddTaskDialog(context),
-            borderRadius: BorderRadius.circular(20),
-            child: Icon(
-              Icons.add,
-              color: Colors.black,
-              size: 32,
-            ),
-          ),
-        ),
       ),
-    ],
-  ),
-),
       extendBody: true,
     );
   }
 
-  Widget _buildNavItem(int index, IconData outlinedIcon, IconData filledIcon, String label) {
+  Widget _buildNavItem(
+      int index, IconData outlinedIcon, IconData filledIcon, String label) {
     final isSelected = _selectedIndex == index;
-    
+
     return InkWell(
       onTap: () => _onTabChanged(index),
       child: Column(

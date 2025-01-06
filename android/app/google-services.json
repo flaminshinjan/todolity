@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "298881764540",
+    "project_id": "todolity-eb309",
+    "storage_bucket": "todolity-eb309.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298881764540:android:eb5bc7b6d2f2cfc74694b9",
+        "android_client_info": {
+          "package_name": "com.example.todolity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "298881764540-suj66fvjork9s5dh08p23im4v3u7mop0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkW0Xdo38xLxdHydiYWG1WOFttj6YZtLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "298881764540-suj66fvjork9s5dh08p23im4v3u7mop0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "298881764540-oaemk75gid6mcdhqnrrsf5cm449d04s6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.shinzu.todolity"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
