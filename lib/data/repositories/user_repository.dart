@@ -7,7 +7,20 @@ class UserRepository {
 
   UserRepository({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
-
+Future<void> updateUserProfile({
+    required String userId,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      await _firestore.collection('users').doc(userId).update({
+        ...data,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      print('Error updating user profile: $e');
+      throw Exception('Failed to update user profile');
+    }
+  }
  Future<List<AppUser>> searchUsers(String searchTerm) async {
     try {
       final String searchLower = searchTerm.toLowerCase();

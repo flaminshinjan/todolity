@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todolity/presentation/screens/profile/edit_profile_screen.dart';
+import 'package:todolity/presentation/screens/tasks/task_details_screen.dart';
 import '../auth/login_screen.dart';
+
+
+class NoTransitionRoute extends MaterialPageRoute {
+  NoTransitionRoute({required WidgetBuilder builder})
+      : super(builder: builder);
+
+  @override
+  Duration get transitionDuration => Duration.zero;
+  
+  @override
+  Duration get reverseTransitionDuration => Duration.zero;
+}
 
 class ProfileScreen extends StatelessWidget {
   final User? currentUser = FirebaseAuth.instance.currentUser;
@@ -92,14 +106,19 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Settings Items
-                _buildSettingsItem(
-                  context,
-                  'Edit Profile',
-                  Icons.person_outline,
-                  onTap: () {
-                    // Navigate to edit profile
-                  },
-                ),
+                // Update the Edit Profile button navigation:
+_buildSettingsItem(
+  context,
+  'Edit Profile',
+  Icons.person_outline,
+  onTap: () {
+    Navigator.of(context).pushReplacement(
+      NoTransitionRoute(
+        builder: (context) => EditProfileScreen(),
+      ),
+    );
+  },
+),
                 _buildSettingsItem(
                   context,
                   'Notifications',

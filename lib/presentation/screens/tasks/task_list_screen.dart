@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:todolity/presentation/blocs/auth/auth_state.dart';
-import 'package:todolity/presentation/screens/auth/login_screen.dart';
 import '../../blocs/tasks/task_bloc.dart';
 import '../../blocs/tasks/task_event.dart';
 import '../../blocs/tasks/task_state.dart';
-import '../../blocs/auth/auth_bloc.dart';
-import '../../blocs/auth/auth_event.dart';
 import '../../widgets/task_item.dart';
-import '../../widgets/add_task_dialog.dart';
+import '../../../data/models/task_model.dart'; // Add this import
 
 class TaskListScreen extends StatefulWidget {
   @override
@@ -19,58 +15,84 @@ class TaskListScreen extends StatefulWidget {
 
 class _TaskListScreenState extends State<TaskListScreen> {
   DateTime selectedDate = DateTime.now();
-@override
-void initState() {
-  super.initState();
-  final user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    context.read<TaskBloc>().add(LoadTasks(user.uid));
+  
+  @override
+  void initState() {
+    super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      context.read<TaskBloc>().add(LoadTasks(user.uid));
+    }
   }
-}
+
+  List<Task> _filterTasksByDate(List<Task> tasks, DateTime date) {
+    return tasks.where((task) {
+      // Handle null safety for createdAt
+      if (task.createdAt == null) return false;
+      return DateUtils.isSameDay(task.createdAt, date);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        
         Padding(
-            padding: EdgeInsets.only(left: 15, top: 20),
-            child: Text(
+          padding: EdgeInsets.only(left: 15, top: 20),
+          child: Text(
             'My Tasks',
             style: TextStyle(
               fontSize: 30,
-              height: 1.2,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
-          ),
-          SizedBox(height: 20),
+        ),
+        SizedBox(height: 20),
+        CalendarStrip(
+          selectedDate: selectedDate,
+          onDateSelected: (date) {
+            setState(() {
+              selectedDate = date;
+            });
+          },
+        ),
+        SizedBox(height: 20),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: CalendarStrip(
-            selectedDate: selectedDate,
-            onDateSelected: (date) {
-              setState(() {
-                selectedDate = date;
-              });
-            },
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            DateFormat('MMMM d, yyyy').format(selectedDate),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[600],
+            ),
           ),
         ),
-        SizedBox(height: 24),
+        SizedBox(height: 10),
         Expanded(
           child: BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
               if (state is TaskLoading) {
                 return Center(child: CircularProgressIndicator());
               } else if (state is TaskLoaded) {
+                final filteredTasks = _filterTasksByDate(state.tasks, selectedDate);
+                if (filteredTasks.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No tasks for this date',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 16,
+                      ),
+                    ),
+                  );
+                }
                 return ListView.builder(
-                  itemCount: state.tasks.length,
+                  itemCount: filteredTasks.length,
                   itemBuilder: (context, index) {
-                    final task = state.tasks[index];
-                    return TaskItem(
-                      task: task,  // Example participants
-                    );
+                    return TaskItem(task: filteredTasks[index]);
                   },
                 );
               }
@@ -93,81 +115,91 @@ class CalendarStrip extends StatelessWidget {
     required this.onDateSelected,
   }) : super(key: key);
 
+  List<DateTime> _getDaysInWeek(DateTime date) {
+    final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
+    return List.generate(7, (index) => firstDayOfWeek.add(Duration(days: index)));
+  }
+
   @override
   Widget build(BuildContext context) {
+    final days = _getDaysInWeek(selectedDate);
+    
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0xffFFDADA),
-        borderRadius: BorderRadius.circular(24),
+        color: Color(0xFFF5E6FF), // Light purple background
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                DateFormat('MMMM').format(selectedDate),
+                DateFormat('MMMM yyyy').format(selectedDate),
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
               ),
-              Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.black,
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.chevron_left),
+                    onPressed: () {
+                      onDateSelected(selectedDate.subtract(Duration(days: 7)));
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.chevron_right),
+                    onPressed: () {
+                      onDateSelected(selectedDate.add(Duration(days: 7)));
+                    },
+                  ),
+                ],
               ),
             ],
           ),
           SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ...[ 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'].map(
-                (day) => Text(
-                  day,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: days.map((date) {
+              final isSelected = DateUtils.isSameDay(date, selectedDate);
+              return GestureDetector(
+                onTap: () => onDateSelected(date),
+                child: Container(
+                  width: 40,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: isSelected ? Colors.black : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(
-                7,
-                (index) {
-                  final date = DateTime.now().add(Duration(days: index - 3));
-                  final isSelected = date.day == selectedDate.day;
-                  return GestureDetector(
-                    onTap: () => onDateSelected(date),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.black : Colors.transparent,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${date.day}',
-                          style: TextStyle(
-                            color: isSelected ? Color(0xffFFDADA) : Colors.black,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat('E').format(date).substring(0, 1),
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black87,
+                          fontSize: 12,
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
+                      SizedBox(height: 4),
+                      Text(
+                        '${date.day}',
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black87,
+                          fontSize: 16,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),

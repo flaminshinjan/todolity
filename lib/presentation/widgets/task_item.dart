@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todolity/presentation/screens/tasks/task_details_screen.dart';
 import 'package:todolity/presentation/widgets/edit_task_dialog.dart';
 import 'package:todolity/presentation/widgets/share_task_dialog.dart';
 import 'package:todolity/presentation/widgets/shared_user_list_dialog.dart';
@@ -95,7 +96,17 @@ class TaskItem extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      child: Container(
+      child: GestureDetector(
+        onTap: () {
+    Navigator.of(context).pushReplacement(
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => TaskDetailsScreen(task: task),
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
+    ),
+  );
+  },
+        child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         decoration: BoxDecoration(
           color: backgroundColor, // Using random pastel color
@@ -112,32 +123,6 @@ class TaskItem extends StatelessWidget {
           padding: EdgeInsets.all(16),
           child: Row(
             children: [
-              // Checkbox
-              GestureDetector(
-                onTap: () => _toggleCompletion(context),
-                child: Container(
-                  width: 24,
-                  height: 24,
-                  margin: EdgeInsets.only(right: 12),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: task.isCompleted ? Colors.purple : Colors.grey[300]!,
-                      width: 2,
-                    ),
-                    color: task.isCompleted ? Colors.purple : Colors.transparent,
-                  ),
-                  child: task.isCompleted
-                      ? Icon(
-                          Icons.check,
-                          size: 16,
-                          color: Colors.white,
-                        )
-                      : null,
-                ),
-              ),
-              
-              // Task content
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,8 +155,29 @@ class TaskItem extends StatelessWidget {
                   ],
                 ),
               ),
-              
-              // Status icon
+              GestureDetector(
+                onTap: () => _toggleCompletion(context),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  margin: EdgeInsets.only(right: 12),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: task.isCompleted ? Colors.white : Colors.white!,
+                      width: 1,
+                    ),
+                    color: task.isCompleted ? Colors.white : Colors.white,
+                  ),
+                  child: task.isCompleted
+                      ? Icon(
+                          Icons.check,
+                          size: 16,
+                          color: Colors.black,
+                        )
+                      : null,
+                ),
+              ),
               Container(
                     width: 40,
                     height: 40,
@@ -257,6 +263,7 @@ class TaskItem extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }
