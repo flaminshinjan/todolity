@@ -91,18 +91,24 @@ class _ShareTaskDialogState extends State<ShareTaskDialog> {
     _searchController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, -5),
+            ),
+          ],
         ),
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -120,7 +126,7 @@ class _ShareTaskDialogState extends State<ShareTaskDialog> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[600],
+                  color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -131,29 +137,31 @@ class _ShareTaskDialogState extends State<ShareTaskDialog> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black87,
               ),
             ),
             SizedBox(height: 24),
             TextField(
               controller: _searchController,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black87),
               decoration: InputDecoration(
                 hintText: 'Search users by email',
-                prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
+                prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
                 hintStyle: TextStyle(color: Colors.grey[600]),
-                labelStyle: TextStyle(color: Colors.grey[400]),
+                labelStyle: TextStyle(color: Colors.grey[700]),
+                filled: true,
+                fillColor: Colors.grey[100],
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey[800]!),
+                  borderSide: BorderSide(color: Colors.grey[300]!),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Color(0xFFF9BE03)),
+                  borderSide: BorderSide(color: Color(0xFF036ac9)),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.red),
+                  borderSide: BorderSide(color: Colors.red[300]!),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -166,7 +174,7 @@ class _ShareTaskDialogState extends State<ShareTaskDialog> {
             ),
             SizedBox(height: 16),
             if (_isLoading)
-              Center(child: CircularProgressIndicator(color: Color(0xFFF9BE03)))
+              Center(child: CircularProgressIndicator(color: Color(0xFF036ac9)))
             else if (_searchResults.isNotEmpty)
               Container(
                 constraints: BoxConstraints(maxHeight: 300),
@@ -178,31 +186,32 @@ class _ShareTaskDialogState extends State<ShareTaskDialog> {
                     return Container(
                       margin: EdgeInsets.symmetric(vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.grey[900],
+                        color: Colors.grey[50],
                         borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey[200]!),
                       ),
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: Color(0xFFF9BE03),
+                          backgroundColor: Color(0xFF036ac9),
                           child: Text(
                             user.email[0].toUpperCase(),
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                         title: Text(
                           user.email,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black87),
                         ),
                         subtitle: user.name != null 
                           ? Text(
                               user.name!,
-                              style: TextStyle(color: Colors.grey[400]),
+                              style: TextStyle(color: Colors.grey[600]),
                             ) 
                           : null,
                         trailing: IconButton(
                           icon: Icon(
                             Icons.share,
-                            color: Color(0xFFF9BE03),
+                            color: Color(0xFF036ac9),
                           ),
                           onPressed: () => _shareWithUser(user),
                         ),
@@ -223,7 +232,7 @@ class _ShareTaskDialogState extends State<ShareTaskDialog> {
                   child: Text(
                     'Close',
                     style: TextStyle(
-                      color: Colors.grey[400],
+                      color: Colors.grey[700],
                       fontSize: 16,
                     ),
                   ),

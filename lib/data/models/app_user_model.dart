@@ -4,6 +4,8 @@ class AppUser {
   final String? name;
    final List<String> tasksSharedWithMe;
   final List<String> tasksSharedByMe;
+   final String? photoUrl;
+  final int? backgroundColor;
 
   AppUser({
     required this.id,
@@ -11,6 +13,8 @@ class AppUser {
     this.name,
     this.tasksSharedWithMe = const [],
     this.tasksSharedByMe = const [],
+    this.photoUrl,
+    this.backgroundColor,
   });
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
@@ -20,6 +24,8 @@ class AppUser {
       name: json['name'] as String?,
        tasksSharedWithMe: List<String>.from(json['tasksSharedWithMe'] ?? []),
       tasksSharedByMe: List<String>.from(json['tasksSharedByMe'] ?? []),
+      photoUrl: json['photoUrl'],
+      backgroundColor: json['backgroundColor'], 
     );
   }
 
@@ -30,6 +36,7 @@ class AppUser {
       name: map['name'] as String?,
       tasksSharedByMe: map['tasksSharedByMe'] as List<String>,
       tasksSharedWithMe: map['tasksSharedWithMe'] as List<String>,
+      
     );
   }
 

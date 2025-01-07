@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todolity/presentation/screens/tasks/task_details_screen.dart';
 import 'package:todolity/presentation/widgets/edit_task_dialog.dart';
 import 'package:todolity/presentation/widgets/share_task_dialog.dart';
 import 'package:todolity/presentation/widgets/shared_user_list_dialog.dart';
+import 'dart:math';
 import '../../data/models/task_model.dart';
 import '../blocs/tasks/task_bloc.dart';
 import '../blocs/tasks/task_event.dart';
 
 class TaskItem extends StatelessWidget {
   final Task task;
-  final List<String>? participants;
+  
+  // List of pastel colors
+  static const List<Color> pastelColors = [
+    Color(0xFFF5E6FF), // Light Purple
+    Color(0xFFE6F0FF), // Light Blue
+    Color(0xFFFFE6E6), // Light Pink
+    Color(0xFFE6FFE6), // Light Green
+    Color(0xFFFFF5E6), // Light Orange
+    Color(0xFFE6FFFF), // Light Cyan
+  ];
+
+  // Generate a random color from the list based on task ID
+  Color _getRandomColor() {
+    final random = Random(task.id.hashCode);
+    return pastelColors[random.nextInt(pastelColors.length)];
+  }
   
   const TaskItem({
     Key? key,
     required this.task,
-    this.participants,
   }) : super(key: key);
 
   void _toggleCompletion(BuildContext context) async {
@@ -37,10 +53,10 @@ class TaskItem extends StatelessWidget {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
+    final backgroundColor = _getRandomColor();
+    
     return Dismissible(
       key: Key(task.id),
       direction: DismissDirection.startToEnd,
@@ -80,94 +96,104 @@ class TaskItem extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      child: Container(
+      child: GestureDetector(
+        onTap: () {
+    Navigator.of(context).pushReplacement(
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => TaskDetailsScreen(task: task),
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
+    ),
+  );
+  },
+        child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         decoration: BoxDecoration(
-          color: Color(0xfff9be03),
+          color: backgroundColor, // Using random pastel color
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
         ),
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        
-                        SizedBox(height: 4),
-                        Text(
-                          task.title,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            decoration: task.isCompleted 
-                                ? TextDecoration.lineThrough 
-                                : TextDecoration.none,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          task.description,
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 14,
-                            decoration: task.isCompleted 
-                                ? TextDecoration.lineThrough 
-                                : TextDecoration.none,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (participants != null && participants!.isNotEmpty)
-                    _buildParticipantsStack(),
-                ],
-              ),
-              SizedBox(height: 12),
-              Row(
-                children: [
-                  _buildTag('Today', Colors.black),
-                  SizedBox(width: 8),
-                 
-                  Spacer(),
-                  Container(
-                    width: 40,
-                    height: 40,
-                    margin: EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      color: task.isCompleted ? Colors.green : Colors.black,
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        task.isCompleted ? Icons.check : Icons.check_outlined,
-                        color: Color(0xfff9be03),
-                        size: 20,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      task.title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black87,
+                        decoration: task.isCompleted 
+                            ? TextDecoration.lineThrough 
+                            : TextDecoration.none,
                       ),
-                      onPressed: () => _toggleCompletion(context),
                     ),
+                    if (task.description.isNotEmpty) ...[
+                      SizedBox(height: 4),
+                      Text(
+                        task.description,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                          decoration: task.isCompleted 
+                              ? TextDecoration.lineThrough 
+                              : TextDecoration.none,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () => _toggleCompletion(context),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  margin: EdgeInsets.only(right: 12),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: task.isCompleted ? Colors.white : Colors.white!,
+                      width: 1,
+                    ),
+                    color: task.isCompleted ? Colors.white : Colors.white,
                   ),
-                  Container(
+                  child: task.isCompleted
+                      ? Icon(
+                          Icons.check,
+                          size: 16,
+                          color: Colors.black,
+                        )
+                      : null,
+                ),
+              ),
+              Container(
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: Colors.white,
                       shape: BoxShape.circle,
                     ),
                     child: PopupMenuButton<String>(
                       icon: Icon(
                         Icons.arrow_forward,
-                        color: Color(0xfff9be03),
+                        color: Colors.black,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                     color: Color(0xfff9be03),
+                     color: Color.fromARGB(255, 0, 0, 0),
                       elevation: 4,
                       onSelected: (value) {
                         switch (value) {
@@ -234,62 +260,10 @@ class TaskItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                ],
-              ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildParticipantsStack() {
-    return SizedBox(
-      width: 80,
-      height: 40,
-      child: Stack(
-        children: [
-          ...List.generate(
-            participants!.length > 3 ? 3 : participants!.length,
-            (index) => Positioned(
-              right: index * 20.0,
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.grey[300],
-                child: Text(participants![index][0]),
-              ),
-            ),
-          ),
-          if (participants!.length > 3)
-            Positioned(
-              right: 60,
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.orange,
-                child: Text(
-                  '+${participants!.length - 3}',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTag(String text, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Color(0xfff9be03),
-          fontSize: 12,
-        ),
       ),
     );
   }

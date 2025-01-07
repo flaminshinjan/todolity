@@ -52,39 +52,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: const Color.fromARGB(255, 12, 12, 12),
+    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
     appBar: _selectedIndex == 0 ? PreferredSize(  // Only show AppBar when home tab is selected
       preferredSize: Size.fromHeight(100),
       child: Container(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         decoration: BoxDecoration(
-          color: const Color(0xFFf9be03),
+          color: const Color(0xffF3E8D6),
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24),
             bottomRight: Radius.circular(24),
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.white,
-                backgroundImage: _currentUser?.photoURL != null
-                    ? NetworkImage(_currentUser!.photoURL!)
-                    : null,
-                child: _currentUser?.photoURL == null
-                    ? Icon(Icons.person, color: Colors.black54)
-                    : null,
-              ),
+Container(
+  width: 50,
+  height: 50,
+  
+  child: Image.asset(
+      'assets/images/profile_placeholder.png',  // Update with your asset path
+      fit: BoxFit.cover,
+    ),
+  
+),
               SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Hi,',
+                    'Good Evening,',
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 14,
@@ -93,7 +93,7 @@ Widget build(BuildContext context) {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    _currentUser?.displayName ?? 'Shinjan',
+                    _currentUser?.displayName ?? 'Shinjan 👋🏼',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
@@ -139,12 +139,9 @@ Expanded(child: _screens[_selectedIndex],),
         child: Container(
           height: 70,
           decoration: BoxDecoration(
-            color: const Color(0xFFF9BE04),
+            color: const Color(0xffF3E8D6),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(  // Added black border
-              color: Colors.black,
-              width: 2,
-            ),
+            
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.2),
@@ -172,12 +169,9 @@ Expanded(child: _screens[_selectedIndex],),
         height: 70,
         width: 70,
         decoration: BoxDecoration(
-          color: const Color(0xFF036ac9),
+          color: const Color(0xFFD7EDC1),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(  // Added black border
-            color: Colors.black,
-            width: 1,
-          ),
+         
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
@@ -193,7 +187,7 @@ Expanded(child: _screens[_selectedIndex],),
             borderRadius: BorderRadius.circular(20),
             child: Icon(
               Icons.add,
-              color: Colors.white,
+              color: Colors.black,
               size: 32,
             ),
           ),
