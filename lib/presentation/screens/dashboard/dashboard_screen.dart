@@ -58,7 +58,7 @@ Widget build(BuildContext context) {
       child: Container(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         decoration: BoxDecoration(
-          color: const Color(0xffEEDEFF),
+          color: const Color(0xffF3E8D6),
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24),
             bottomRight: Radius.circular(24),
@@ -139,7 +139,7 @@ Expanded(child: _screens[_selectedIndex],),
         child: Container(
           height: 70,
           decoration: BoxDecoration(
-            color: const Color(0xFFEEDEFF),
+            color: const Color(0xffF3E8D6),
             borderRadius: BorderRadius.circular(24),
             
             boxShadow: [
@@ -169,7 +169,7 @@ Expanded(child: _screens[_selectedIndex],),
         height: 70,
         width: 70,
         decoration: BoxDecoration(
-          color: const Color(0xFFF6DEC2),
+          color: const Color(0xFFD7EDC1),
           borderRadius: BorderRadius.circular(20),
          
           boxShadow: [
